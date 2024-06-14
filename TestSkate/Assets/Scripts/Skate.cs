@@ -1,22 +1,41 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 
-public class Movement : MonoBehaviour
+public class Skate : MonoBehaviour
 {
+    ///singleton
+    public static Skate Instance { get; private set; }
+
+    void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(this);
+        }
+        else
+        {
+            Instance = this;
+        }
+    }
+    ///singleton
+
     [SerializeField]
     private float maxRigthAngle = 30;
     [SerializeField]
     private float maxForwardAngle = 30;
     [SerializeField]
-    private float movementSpeed = 10;
-    [SerializeField]
-    private float rotationSpeed = 10;
+    private float HeadMoveHeight = 1;
+    // [SerializeField]
+    // private float movementSpeed = 10;
+    // [SerializeField]
+    // private float rotationSpeed = 10;
 
     [SerializeField]
     private Transform board;
+
+    [SerializeField]
+    private Transform head;
 
     [SerializeField]
     private Vector3 localBoardUp;
@@ -25,8 +44,11 @@ public class Movement : MonoBehaviour
     [SerializeField]
     private Vector3 localBoardForward;
 
+    public Vector3 localMoveDirection {get; private set;}
+
     void Start()
-    {}
+    {
+    }
 
     void Update()
     {
@@ -43,13 +65,20 @@ public class Movement : MonoBehaviour
         Debug.DrawLine(board.position, board.position + planedRight, Color.blue);
         Debug.DrawLine(board.position, board.position + Vector3.up, Color.blue);
 
-        float speed = Math.Clamp(maxRigthAngle-Math.Abs(angleRight), 0, maxRigthAngle) / maxRigthAngle*movementSpeed;
-        Debug.Log(angleForward + " "+angleRight+" "+boardUp);
-        transform.position += (boardForward - Vector3.up*boardForward.y) * speed * Time.deltaTime;
+        float headHeight = head.position.y -board.position.y;
 
-        float rotSpeed =  Math.Clamp(angleForward,-maxForwardAngle,maxForwardAngle)/maxForwardAngle*rotationSpeed * speed/movementSpeed;
+        float forwardValue = Mathf.Clamp(HeadMoveHeight-headHeight, 0, HeadMoveHeight)/HeadMoveHeight;
+        float rightValue =  Mathf.Clamp(angleForward,-maxForwardAngle,maxForwardAngle)/maxForwardAngle;
 
-        transform.Rotate(Vector3.up, rotSpeed * Time.deltaTime);
+        localMoveDirection = forwardValue*Vector3.forward + Vector3.right*rightValue;
+//        print(localMoveDirection + " " + angleForward + " "+angleRight);
+        // float speed = Mathf.Clamp(maxRigthAngle-Mathf.Abs(angleRight), 0, maxRigthAngle) / maxRigthAngle*movementSpeed;
+        // Debug.Log(angleForward + " "+angleRight+" "+boardUp);
+        // transform.position += (boardForward - Vector3.up*boardForward.y) * speed * Time.deltaTime;
+
+        // float rotSpeed =  Math.Clamp(angleForward,-maxForwardAngle,maxForwardAngle)/maxForwardAngle*rotationSpeed * speed/movementSpeed;
+
+        // transform.Rotate(Vector3.up, rotSpeed * Time.deltaTime);
     }
 
     void OnDrawGizmos()

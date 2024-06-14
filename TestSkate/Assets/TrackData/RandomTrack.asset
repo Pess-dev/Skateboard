@@ -14,5 +14,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Chunks:
   - ChunkPrefab: {fileID: 7394793216937985908, guid: a7cbef83ddd5b724faec5512e298904e, type: 3}
-    length: 3
+    weight: 3
+  - ChunkPrefab: {fileID: 6240149940721412219, guid: e3afef34174a4f0408cb996c83754687, type: 3}
+    weight: 2
+  - ChunkPrefab: {fileID: 3984913575404735214, guid: 38bb12767abe7fd488b2f3acc5f32924, type: 3}
+    weight: 2
+  - ChunkPrefab: {fileID: 2118635834352192397, guid: fc58faca9cb16ad40b036edfe14b7f2e, type: 3}
+    weight: 2
+  - ChunkPrefab: {fileID: 3616990487222273436, guid: 061a4f47f7088d84ab58ebce8cfd029b, type: 3}
+    weight: 2
+  - ChunkPrefab: {fileID: 8753415490466826570, guid: 2bc33f1d8cd57784c98d42c371a225d6, type: 3}
+    weight: 2
+  - ChunkPrefab: {fileID: 1805045182374071172, guid: aced5f126a7e85042834d4ea0e61d547, type: 3}
+    weight: 2
+  - ChunkPrefab: {fileID: 6304687124622652338, guid: 12e6ba3cf36e51f4cafdd2d80949a78e, type: 3}
+    weight: 1
+  - ChunkPrefab: {fileID: 2622593136419732423, guid: ace5e7db4f69503428875dfb3505331d, type: 3}
     weight: 1

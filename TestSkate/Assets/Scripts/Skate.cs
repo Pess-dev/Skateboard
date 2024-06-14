@@ -25,6 +25,10 @@ public class Skate : MonoBehaviour
     [SerializeField]
     private float maxForwardAngle = 30;
     [SerializeField]
+    private float minRightAngle = 5;
+    [SerializeField]
+    private float minForwardAngle = 5;
+    [SerializeField]
     private float HeadMoveHeight = 1;
     // [SerializeField]
     // private float movementSpeed = 10;
@@ -45,6 +49,7 @@ public class Skate : MonoBehaviour
     private Vector3 localBoardForward;
 
     public Vector3 localMoveDirection {get; private set;}
+    public float pitch {get; private set;}
 
     void Start()
     {
@@ -67,11 +72,20 @@ public class Skate : MonoBehaviour
 
         float headHeight = head.position.y -board.position.y;
 
+        if (Mathf.Abs(angleForward)<minForwardAngle)
+            angleForward=0; 
+        if (Mathf.Abs(angleRight)<minRightAngle)
+            angleRight=0;
+        
         float forwardValue = Mathf.Clamp(HeadMoveHeight-headHeight, 0, HeadMoveHeight)/HeadMoveHeight;
+        
         float rightValue =  Mathf.Clamp(angleForward,-maxForwardAngle,maxForwardAngle)/maxForwardAngle;
 
         localMoveDirection = forwardValue*Vector3.forward + Vector3.right*rightValue;
-//        print(localMoveDirection + " " + angleForward + " "+angleRight);
+        
+        pitch = Mathf.Clamp(angleRight, -maxRigthAngle, maxRigthAngle)/maxRigthAngle;
+
+        //        print(localMoveDirection + " " + angleForward + " "+angleRight);
         // float speed = Mathf.Clamp(maxRigthAngle-Mathf.Abs(angleRight), 0, maxRigthAngle) / maxRigthAngle*movementSpeed;
         // Debug.Log(angleForward + " "+angleRight+" "+boardUp);
         // transform.position += (boardForward - Vector3.up*boardForward.y) * speed * Time.deltaTime;
@@ -93,5 +107,9 @@ public class Skate : MonoBehaviour
         Gizmos.DrawLine(board.position, board.position + board.TransformDirection(localBoardRight));
         Gizmos.color = Color.red;
         Gizmos.DrawLine(board.position, board.position + board.TransformDirection(localBoardForward));
+    }
+
+    public Transform GetHead(){
+        return head;
     }
 }

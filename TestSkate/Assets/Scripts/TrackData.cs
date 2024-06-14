@@ -1,17 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-[CreateAssetMenu(fileName = "TrackData", menuName = "Track", order = 1)]
+//[CreateAssetMenu(fileName = "TrackData", menuName = "Track", order = 1)]
 public class TrackData : ScriptableObject
 {
     public class Chunk{
         public Object ChunkPrefab;
-        public float lenght;
-        public Chunk(Object _ChunkPrefab, float _lenght){
+        public float lenght = 1;
+        public Chunk(Object _ChunkPrefab){
             ChunkPrefab = _ChunkPrefab;
-            lenght = _lenght;
+            TrackChunk tc = ChunkPrefab.GetComponent<TrackChunk>();
+            if (tc != null)
+                lenght = ChunkPrefab.GetComponent<TrackChunk>().ChunkLength;
         }
     }
 

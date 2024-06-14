@@ -23,7 +23,11 @@ public class Track : MonoBehaviour
     private Skate _skate;
 
     [SerializeField]
-    private float maxForwardSpeed = 5;
+    private float maxForwardSpeed = 5f;
+    [SerializeField]
+    private float forwardAcceleration = 5f;
+    [SerializeField]
+    private float friction = 1f;
     
     [SerializeField]
     private float maxRightSpeed = 1;
@@ -42,8 +46,15 @@ public class Track : MonoBehaviour
     }
 
     void Update(){
-        Vector3 velocity =transform.rotation*-(_skate.localMoveDirection.z*maxForwardSpeed * Vector3.forward +
-         _skate.localMoveDirection.x*maxRightSpeed*Vector3.right * (forwardSpeedAffectToRightSpeed?Mathf.Sqrt(_skate.localMoveDirection.z):1))*Time.deltaTime;
+        float addVelocity = (_skate.localMoveDirection.z*forwardAcceleration-friction)*Time.deltaTime;
+
+        if(_skate.localMoveDirection.z==0) 
+            addVelocity -= Mathf.Abs(_skate.pitch)*forwardAcceleration*Time.deltaTime;
+
+        float forwardVelocity = Mathf.Clamp(Vector3.Project(trackVelocity, transform.forward).magnitude+addVelocity, 0, maxForwardSpeed);
+       
+        Vector3 velocity = -forwardVelocity*transform.forward 
+        - transform.rotation*(_skate.localMoveDirection.x*maxRightSpeed*Vector3.right * (forwardSpeedAffectToRightSpeed?Mathf.Sqrt(_skate.localMoveDirection.z):1))*Time.deltaTime;
         
         Vector3 deltaPos = _skate.transform.position - transform.position;
 
@@ -57,5 +68,9 @@ public class Track : MonoBehaviour
         //velocity = Vector3.ClampMagnitude(velocity, maxSpeed);
         
         //transform.position += velocity * Time.deltaTime;
+    }
+
+    public void addForwardVelocity(float value){
+        trackVelocity += transform.forward*value;
     }
 }

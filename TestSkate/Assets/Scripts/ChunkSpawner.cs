@@ -19,11 +19,14 @@ public class ChunkSpawner : MonoBehaviour
     }
 
     void Update(){
-        traveled += _track.trackVelocity.magnitude;
+        traveled += _track.trackVelocity.magnitude*Time.deltaTime;
+
         if (traveled > lastChunkLength){
-            TrackData.Chunk chunk = _track.trackData.GetChunk(); 
-            lastChunkLength = chunk.lenght;
+            TrackData.Chunk chunk = _track.trackData.GetChunk();
             Instantiate(chunk.ChunkPrefab, SpawnPoint.position + _track.transform.forward * (lastChunkLength-traveled), _track.transform.rotation, _track.transform); 
+            
+            //print(lastChunkLength);
+            lastChunkLength = chunk.lenght;
             traveled = 0;
         }
     }

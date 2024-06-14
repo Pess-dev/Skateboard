@@ -8,7 +8,6 @@ public class RandomTrack : TrackData
      [System.Serializable]
     public class ChunkData{
         public Object ChunkPrefab;
-        public float length = 1;
         public float weight = 1;//can be higher than 1
     }
 
@@ -28,7 +27,7 @@ public class RandomTrack : TrackData
             current += c.weight;
             if (random < current)
             {
-                return new Chunk(c.ChunkPrefab,c.length);
+                return new Chunk(c.ChunkPrefab);
             }
         }
         return null;

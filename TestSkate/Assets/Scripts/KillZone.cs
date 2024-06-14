@@ -14,7 +14,6 @@ public class KillZone : MonoBehaviour
     // }
 
     void OnTriggerEnter(Collider other){
-        print(other.gameObject.name);
         if(other.gameObject.tag == "Chunk"){
             Destroy(other.gameObject);
         }

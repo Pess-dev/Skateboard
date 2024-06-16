@@ -203,6 +203,7 @@ MonoBehaviour:
   _sampleMode: 0
   _subscribers:
   - {fileID: 6777564255622289058}
+  - {fileID: 0}
   _rawSamples:
   - position: {x: 0, y: 0, z: -16.789421}
     up: {x: 0, y: 1, z: 0}

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Dreamteck.Splines;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -17,6 +18,11 @@ public class TrackData : ScriptableObject
                 lenght = ChunkPrefab.GetComponent<TrackChunk>().ChunkLength;
         }
     }
+
+    
+    public SplineComputer trackSpline = null;
+    
+    public float startTrackDistance = 5f;
 
     virtual public Chunk GetChunk(){
         return null;

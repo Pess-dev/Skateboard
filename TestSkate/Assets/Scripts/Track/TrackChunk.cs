@@ -13,7 +13,7 @@ public class TrackChunk : MonoBehaviour
 
     void Update()
     {
-        transform.position += _track.trackVelocity*Time.deltaTime;        
+        //transform.position += _track.trackForwardVelocity*Time.deltaTime;        
     }
     public void OnDrawGizmos()
     {

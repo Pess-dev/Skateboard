@@ -19,7 +19,7 @@ public class ChunkSpawner : MonoBehaviour
     }
 
     void Update(){
-        traveled += _track.trackVelocity.magnitude*Time.deltaTime;
+        //traveled += _track.trackForwardVelocity.magnitude*Time.deltaTime;
 
         if (traveled > lastChunkLength){
             TrackData.Chunk chunk = _track.trackData.GetChunk();

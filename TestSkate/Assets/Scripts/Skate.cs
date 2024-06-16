@@ -66,9 +66,9 @@ public class Skate : MonoBehaviour
 
         float angleForward = -Vector3.SignedAngle(planedRight, board.right, planedForward);
         float angleRight = Vector3.SignedAngle(planedForward,board.forward, planedRight)-90;
-        Debug.DrawLine(board.position, board.position + planedForward, Color.red);
-        Debug.DrawLine(board.position, board.position + planedRight, Color.blue);
-        Debug.DrawLine(board.position, board.position + Vector3.up, Color.blue);
+       // Debug.DrawLine(board.position, board.position + planedForward, Color.red);
+        //Debug.DrawLine(board.position, board.position + planedRight, Color.blue);
+       // Debug.DrawLine(board.position, board.position + Vector3.up, Color.blue);
 
         float headHeight = head.position.y -board.position.y;
 
@@ -101,12 +101,12 @@ public class Skate : MonoBehaviour
         {
             return;
         }
-        Gizmos.color = Color.green;
-        Gizmos.DrawLine(board.position, board.position + board.TransformDirection(localBoardUp));
-        Gizmos.color = Color.blue;
-        Gizmos.DrawLine(board.position, board.position + board.TransformDirection(localBoardRight));
-        Gizmos.color = Color.red;
-        Gizmos.DrawLine(board.position, board.position + board.TransformDirection(localBoardForward));
+        // Gizmos.color = Color.green;
+        // Gizmos.DrawLine(board.position, board.position + board.TransformDirection(localBoardUp));
+        // Gizmos.color = Color.blue;
+        // Gizmos.DrawLine(board.position, board.position + board.TransformDirection(localBoardRight));
+        // Gizmos.color = Color.red;
+        // Gizmos.DrawLine(board.position, board.position + board.TransformDirection(localBoardForward));
     }
 
     public Transform GetHead(){

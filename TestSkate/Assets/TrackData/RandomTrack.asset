@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 111ebbee7086d364b85a5b7d071d73ad, type: 3}
   m_Name: RandomTrack
   m_EditorClassIdentifier: 
-  trackSpline: {fileID: 4514386405168632333, guid: 415fd1903b7fe6e4780ffdb9f453b43d, type: 3}
+  trackSpline: {fileID: 254673996092572415, guid: 4c0272eb85627f8469d3d9f4aca6b69a, type: 3}
   startTrackDistance: 5
   Chunks:
   - ChunkPrefab: {fileID: 7394793216937985908, guid: a7cbef83ddd5b724faec5512e298904e, type: 3}

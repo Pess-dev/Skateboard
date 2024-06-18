@@ -1,15 +1,12 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Dreamteck.Splines;
 using UnityEngine;
 
 public class ChunkSpawner : MonoBehaviour
 {
     private Track _track;
-
-    [SerializeField]
-    private Transform SpawnPoint;
-
     private float lastChunkLength = 0;
 
     private float traveled = 0;
@@ -19,15 +16,22 @@ public class ChunkSpawner : MonoBehaviour
     }
 
     void Update(){
-        //traveled += _track.trackForwardVelocity.magnitude*Time.deltaTime;
-
+        SplineComputer computer = _track.GetSplineComputer();
+        transform.position = computer.GetPoint(computer.pointCount-1).position;
+        traveled += _track.trackForwardVelocity*Time.deltaTime;
         if (traveled > lastChunkLength){
-            TrackData.Chunk chunk = _track.trackData.GetChunk();
-            Instantiate(chunk.ChunkPrefab, SpawnPoint.position + _track.transform.forward * (lastChunkLength-traveled), _track.transform.rotation, _track.transform); 
-            
-            //print(lastChunkLength);
-            lastChunkLength = chunk.lenght;
-            traveled = 0;
+           SpawnChunk();
         }
+    }
+
+    /// <summary>
+    /// Instantiates a chunk
+    /// </summary>
+    private void SpawnChunk(){
+        TrackData.Chunk chunk = _track.trackData.GetChunk();
+        Instantiate(chunk.ChunkPrefab, transform.position, transform.rotation, _track.transform); 
+        //print(lastChunkLength);
+        lastChunkLength = chunk.lenght;
+        traveled = 0;
     }
 }

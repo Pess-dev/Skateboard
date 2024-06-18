@@ -1,28 +1,39 @@
 using System.Collections;
 using System.Collections.Generic;
+using Dreamteck.Splines;
 using UnityEngine;
 
 public class TrackChunk : MonoBehaviour
 {
     public float ChunkLength = 1f;
     Track _track;
+    SplineFollower splineFollower;
+    bool flag = true;
     void Start()
     {
         _track = Track.Instance;
+        splineFollower = GetComponent<SplineFollower>();
+        if (splineFollower == null)
+        {
+            splineFollower = gameObject.AddComponent<SplineFollower>();
+        }
+        
+        splineFollower.spline = _track.GetSplineComputer();
+        splineFollower.onBeginningReached += OnEnd;
+        splineFollower.updateMethod = SplineFollower.UpdateMethod.LateUpdate;
+        splineFollower.SetPercent(100d);
     }
 
     void Update()
     {
-        //transform.position += _track.trackForwardVelocity*Time.deltaTime;        
+        if (flag)
+        {splineFollower.SetPercent(100d);
+        flag = false;}
+        splineFollower.followSpeed = -_track.trackForwardVelocity;    
     }
-    public void OnDrawGizmos()
+
+    void OnEnd(double percent)
     {
-        var r = GetComponent<Renderer>();
-        if (r == null)
-            return;
-        var bounds = r.bounds;
-        Gizmos.matrix = Matrix4x4.identity;
-        Gizmos.color = Color.blue;
-        Gizmos.DrawWireCube(bounds.center, bounds.extents * 2);
+        Destroy(gameObject);
     }
 }

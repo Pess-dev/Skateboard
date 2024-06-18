@@ -68,9 +68,11 @@ public class Track : MonoBehaviour
     private float maxSplineAngle = 30f; 
     [SerializeField]
     private float splineBendSpeed = 0.1f; 
+    [SerializeField]
+    private int startSplineBendPointIndex = 4; 
     private Vector3 splineTargetDirection = Vector3.forward;
     private Vector3 splineCurentDirection = Vector3.forward;
-    private float changeSplineDirectionTimer = 0f;
+    private float changeSplineDirectionTimer = 1000f;
 
     void Start()
     {
@@ -100,8 +102,7 @@ public class Track : MonoBehaviour
         
         Vector3 deltaPos = transform.InverseTransformDirection(_skate.transform.position - transform.position);
 
-        ////
-        if (Vector3.Project(deltaPos, transform.right).magnitude >= maxXDistance && deltaPos.x>rigthVelocity){
+        if (Vector3.Project(deltaPos, transform.right).magnitude >= maxXDistance && Mathf.Sign(deltaPos.x)!=Mathf.Sign(rigthVelocity)){
             rigthVelocity = 0;
         }
 
@@ -127,7 +128,7 @@ public class Track : MonoBehaviour
         changeSplineDirectionTimer += deltaTime * speed;
         if (changeSplineDirectionTimer > changeSplineDirectionCoolDown){
             changeSplineDirectionTimer = 0f;
-            splineTargetDirection = GetRandomDirectionWithinAngle(transform.forward, maxSplineAngle);
+            splineTargetDirection = GetRandomDirectionWithinAngle(Vector3.forward, maxSplineAngle);
         }
         splineCurentDirection = Vector3.Slerp(splineCurentDirection, splineTargetDirection, speed*splineBendSpeed*deltaTime/180f*Mathf.PI);
     }
@@ -145,26 +146,21 @@ public class Track : MonoBehaviour
     }
 
     /// <summary>
-    /// Bends the tracks spline via function using splineTargetDirection by changing the position of spline points starting from index 3
+    /// Bends the tracks spline via function using splineTargetDirection by changing the position of spline points starting from index startSplineBendPointIndex
+    /// <para>WARNING: Mesh does not updates if splineCurentDirection equals splineTargetDirection (issue with SplineMesh)</para>
     /// </summary>
     void UpdateTrackSpline(){
-        Vector3 startPosition = trackMesh.spline.GetPoint(2).position;
-        float maxDistance = splineDistanceBetweenPoints*(trackMesh.spline.pointCount-3);
-        for (int i = 3; i < trackMesh.spline.pointCount; i++){
-            SplinePoint trackPoint = trackMesh.spline.GetPoint(3);
-            float distance = splineDistanceBetweenPoints*(i-2);
-            trackPoint.position = startPosition+Vector3.Lerp(transform.forward,splineCurentDirection,distance/maxDistance).normalized*distance;
+        Vector3 startPosition = trackMesh.spline.GetPoint(startSplineBendPointIndex-1, SplineComputer.Space.Local).position;
+        float maxDistance = splineDistanceBetweenPoints*(trackMesh.spline.pointCount-startSplineBendPointIndex);
+        for (int i = startSplineBendPointIndex; i < trackMesh.spline.pointCount; i++){
+            SplinePoint trackPoint = trackMesh.spline.GetPoint(i, SplineComputer.Space.Local); 
+            float distance = splineDistanceBetweenPoints*(i-startSplineBendPointIndex+1);
+            trackPoint.position = startPosition-Vector3.Lerp(Vector3.forward, splineCurentDirection, distance/maxDistance).normalized*distance;
             trackPoint.normal = Vector3.up;
-            trackMesh.spline.SetPoint(i, trackPoint);
+            trackMesh.spline.SetPoint(i, trackPoint, SplineComputer.Space.Local);
         }
-        
+        trackMesh.RebuildImmediate();
     }
-
-    // Vector3 ReflectVectorAxis(Vector3 original, Vector3 axis)
-    // {
-    //     Vector3 normal = axis.normalized;
-    //     return (-original) - Vector3.Project(-original,axis) + Vector3.Project(original,axis);
-    // }
 
 
     /// <summary>
@@ -185,5 +181,14 @@ public class Track : MonoBehaviour
     /// </summary>
     public void addForwardVelocity(float value){
         trackForwardVelocity += value;
+    }
+
+
+    /// <summary>
+    /// Returns the spline computer of the track
+    /// </summary>
+    /// <return>SplineComputer</return>
+    public SplineComputer GetSplineComputer(){
+        return trackMesh.spline;
     }
 }

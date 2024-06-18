@@ -14,6 +14,7 @@ public class MaterialOffsetTrack : MonoBehaviour
         splineMesh = GetComponent<SplineMesh>();
     
     }
+    
     void Update()
     {
         float newValue = splineMesh.uvOffset.y +Track.Instance.trackForwardVelocity*Time.deltaTime * scale;

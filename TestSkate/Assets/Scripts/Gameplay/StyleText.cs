@@ -52,6 +52,7 @@ public class StyleText : MonoBehaviour
     [SerializeField]
     private float impulseMultiplier = 100f;
 
+    
     void Start(){
         _rb = GetComponent<Rigidbody>();
         Game.Instance.onStyleChanged.AddListener(UpdateValue);
@@ -61,6 +62,9 @@ public class StyleText : MonoBehaviour
         UpdateValue();
     }
 
+    /// <summary>
+    /// Updates text
+    /// </summary>
     void UpdateValue(){
         float oldStyle = currentStyle.value;
         for (int i = styles.Count-1; i >= 0; i--){

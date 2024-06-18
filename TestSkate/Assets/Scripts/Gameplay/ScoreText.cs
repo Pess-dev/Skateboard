@@ -23,6 +23,9 @@ public class ScoreText : MonoBehaviour
         UpdateValue();
     }
 
+    /// <summary>
+    /// Updates score text
+    /// </summary>
     void UpdateValue(){
         _text.text = prefix + ((int)Game.Instance.score).ToString();
         Vector3 randomDirection = Random.insideUnitSphere;

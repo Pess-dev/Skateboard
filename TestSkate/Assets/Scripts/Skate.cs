@@ -18,7 +18,7 @@ public class Skate : MonoBehaviour
             Instance = this;
         }
     }
-    ///singleton
+    ///
 
     [SerializeField]
     private float maxRigthAngle = 30;
@@ -30,10 +30,6 @@ public class Skate : MonoBehaviour
     private float minForwardAngle = 5;
     [SerializeField]
     private float HeadMoveHeight = 1;
-    // [SerializeField]
-    // private float movementSpeed = 10;
-    // [SerializeField]
-    // private float rotationSpeed = 10;
 
     [SerializeField]
     private Transform board;
@@ -57,7 +53,14 @@ public class Skate : MonoBehaviour
 
     void Update()
     {
-        Vector3 boardForward =  board.TransformDirection(localBoardForward);
+       UpdateValues();
+    }
+
+    ///<summary>
+    /// Update the values of the board for control
+    ///</summary>
+    void UpdateValues(){
+         Vector3 boardForward =  board.TransformDirection(localBoardForward);
         Vector3 boardRight =  board.TransformDirection(localBoardRight);
         Vector3 boardUp =  board.TransformDirection(localBoardUp);
 
@@ -109,6 +112,11 @@ public class Skate : MonoBehaviour
         // Gizmos.DrawLine(board.position, board.position + board.TransformDirection(localBoardForward));
     }
 
+
+    /// <summary>
+    /// Get the head of the board
+    /// </summary>
+    /// <returns>Transform of player head (camera)</returns>
     public Transform GetHead(){
         return head;
     }

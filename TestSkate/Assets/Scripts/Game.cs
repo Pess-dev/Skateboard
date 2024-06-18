@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Rendering;
 
 public class Game : MonoBehaviour
 {
@@ -43,24 +44,45 @@ public class Game : MonoBehaviour
     
     void Update()
     {
-        timer += Time.deltaTime;
-        style -= Time.deltaTime;
+        UpdateGame(Time.deltaTime);
+    }
+
+    ///<summary>
+    /// Updating of game values
+    ///</summary>
+    ///<param name="deltaTime">Time since last update</param>
+    void UpdateGame(float deltaTime){
+        timer += deltaTime;
+        style -= deltaTime;
         onStyleChanged.Invoke();
         if (style < 0) style = 0;
     }
 
+    ///<summary>
+    /// Updates the score by amount multiplied by the style
+    ///</summary>
+    ///<param name="amount">Amount value to add</param>
     public void AddScore(float amount){
         score += amount * style<1?1:style;
         deltaScore = amount;
         onScoreChanged.Invoke();
         AddStyle(amount*styleMultiplier);
     }
+
+    ///<summary>
+    /// Adds the style by value
+    ///</summary>
+    ///<param name="value">Score value to add</param>
     public void AddStyle(float value){
         style += value;
-        if (style > maxStyle) style = maxStyle;
+        style = Mathf.Clamp(style,0,maxStyle);
         onStyleChanged.Invoke();
     }
 
+    ///<summary>
+    /// Subtracts the style by value
+    ///</summary>
+    ///<param name="value">Score value to subtract</param>
     public void knockDownStyle(float value){
         AddStyle(-value);
     }

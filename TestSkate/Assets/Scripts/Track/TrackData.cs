@@ -24,6 +24,10 @@ public class TrackData : ScriptableObject
     
     public float startTrackDistance = 5f;
 
+    /// <summary>
+    /// Get the chunk of the track
+    /// </summary>
+    /// <returns>Chunk object</returns>
     virtual public Chunk GetChunk(){
         return null;
     }

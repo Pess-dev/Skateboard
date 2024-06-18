@@ -19,9 +19,7 @@ public class Collector : MonoBehaviour
     }
     
     void OnTriggerEnter(Collider other){
-        
         Obstacle obstacle = other.GetComponent<Obstacle>();
-
         if (obstacle != null) obstacle.Collided();
     }
 }

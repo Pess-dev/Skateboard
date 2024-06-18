@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Dreamteck.Splines;
-using Unity.Mathematics;
 using UnityEngine;
 
 public class Track : MonoBehaviour
@@ -62,6 +61,17 @@ public class Track : MonoBehaviour
     [SerializeField]
     private bool forwardSpeedAffectToRightSpeed = false;
 
+
+    [SerializeField]
+    private float changeSplineDirectionCoolDown = 10f;
+    [SerializeField]
+    private float maxSplineAngle = 30f; 
+    [SerializeField]
+    private float splineBendSpeed = 0.1f; 
+    private Vector3 splineTargetDirection = Vector3.forward;
+    private Vector3 splineCurentDirection = Vector3.forward;
+    private float changeSplineDirectionTimer = 0f;
+
     void Start()
     {
         _skate = Skate.Instance;
@@ -69,6 +79,16 @@ public class Track : MonoBehaviour
     }
 
     void Update(){
+        UpdateTrackMovement(Time.deltaTime);
+        UpdateTrackSplineTargetDirection(Time.deltaTime);
+        UpdateTrackSpline();
+    }
+
+    /// <summary>
+    /// Updates the values of the track movement 
+    /// </summary>
+    /// <param name="deltaTime"> Time since last update </param>
+    private void UpdateTrackMovement(float deltaTime){
         float addVelocity = (_skate.localMoveDirection.z*forwardAcceleration-friction)*Time.deltaTime;
 
         if(_skate.localMoveDirection.z==0) 
@@ -79,7 +99,6 @@ public class Track : MonoBehaviour
         float rigthVelocity = - (_skate.localMoveDirection.x*maxRightSpeed*(forwardSpeedAffectToRightSpeed?Mathf.Sqrt(_skate.localMoveDirection.z):1));
         
         Vector3 deltaPos = transform.InverseTransformDirection(_skate.transform.position - transform.position);
-
 
         ////
         if (Vector3.Project(deltaPos, transform.right).magnitude >= maxXDistance && deltaPos.x>rigthVelocity){
@@ -95,107 +114,62 @@ public class Track : MonoBehaviour
         currentDistance += deltaPositionDistance;
         if (currentDistance > trackMeshLength){
             currentDistance = currentDistance - trackMeshLength;
-         }
-        
-        UpdateTrackSpline();
-    }
-
-    /** Перемещение сплайна целиком 
-    private void OldUpdateTrackSpline(){
-        float clipFrom = currentDistance/trackMeshLength-backwardsTrackDistance01;
-        float clipTo = currentDistance/trackMeshLength+forwardTrackDistance01; 
-        
-        if (clipFrom < 0) clipFrom = 1 + clipFrom;
-        if (clipTo > 1) clipTo = clipTo - 1;
-
-        trackMesh.clipFrom = clipFrom;
-        trackMesh.clipTo = clipTo;
-        print(backwardsTrackDistance01+" "+forwardTrackDistance01+" "+clipFrom + " " + clipTo);
-
-        SplineSample sample = trackMesh.spline.Evaluate(currentDistance/trackMeshLength);
-        
-        
-        Vector3 localSplinePosition = sample.position;
-        Vector3 newForward = transform.rotation * Vector3.Reflect(Vector3.Reflect(-sample.forward, Vector3.forward),Vector3.up);
-        Vector3 newRight = transform.rotation * sample.right;
-        Vector3 newUp = transform.rotation * ReflectVectorAxis(sample.up, Vector3.up);
-        
-
-        //rotateAround to sample.forward trackMesh.transform.position
-        Quaternion targetRotation = Quaternion.LookRotation(newForward, newUp);
-
-        //Quaternion targetRotation = Quaternion.LookRotation(Vector3.Reflect(-sample.forward, transform.forward), Vector3.Reflect(-sample.up, transform.up));
-        
-        //print( sample.forward +" "+sample.up);
-
-        //Quaternion targetRotation = Quaternion.LookRotation(Vector3.Reflect(-sample.forward, transform.forward), sample.up)
-        //Quaternion targetRotation = Quaternion.FromToRotation(sample.forward, transform.forward);//* Quaternion.FromToRotation(sample.up, transform.up);
-        
-        trackMesh.transform.rotation = targetRotation;
-        trackMesh.transform.position = transform.position - targetRotation*localSplinePosition;
-
-        //trackMesh.transform.RotateAround(position, Vector3.SignedAngle(trackMesh.transform.forward, targetRotation*Vector3.forward, Vector3.up), Vector3.up);
-    }
-    **/
-
-
-    /** Изгибание сплайна по заготовленному сплайну
-    void UpdateTrackSpline(){
-        //print(currentDistance);
-
-        SplinePoint trackPoint = trackMesh.spline.GetPoint(2);
-        float distance01 = currentDistance/trackMeshLength;
-        distance01 -= Mathf.Floor(distance01);
-        SplineSample splinePointLocal = trackData.trackSpline.Evaluate(distance01);
-        Quaternion additionalRotation = Quaternion.LookRotation(splinePointLocal.forward, splinePointLocal.up);
-        Vector3 firstPointLocalPosition = splinePointLocal.position;
-        Vector3 startPosition = trackPoint.position;
-        
-        for (int i = 3; i < trackMesh.spline.pointCount; i++){
-            trackPoint = trackMesh.spline.GetPoint(3);
-            distance01 = (currentDistance+splineDistanceBetweenPoints*(i-2))/trackMeshLength;
-            distance01 -= Mathf.Floor(distance01);
-            splinePointLocal = trackData.trackSpline.Evaluate(distance01);
-            
-            //Vector3 newForward = transform.rotation * Vector3.Reflect(Vector3.Reflect(-splinePointLocal.forward, Vector3.forward),Vector3.up);
-            //Vector3 newRight = transform.rotation * splinePointLocal.right;
-            //Vector3 newUp = transform.rotation * ReflectVectorAxis(splinePointLocal.up, Vector3.up);
-            
-            //rotateAround to sample.forward trackMesh.transform.position
-            //Quaternion targetRotation = Quaternion.FromToRotation(splinePointLocal.forward,Vector3.forward)*Quaternion.FromToRotation(splinePointLocal.up,Vector3.up);
-            Quaternion targetRotation = Quaternion.FromToRotation(splinePointLocal.forward,Vector3.forward);
-            trackPoint.position = targetRotation*(-splinePointLocal.position + firstPointLocalPosition);
-            trackPoint.normal = targetRotation*splinePointLocal.up;
-            trackMesh.spline.SetPoint(i, trackPoint);
         }
-        // string printList = "";
-        // for (int i = 0; i < distances.Count; i++){
-        //     printList += distances[i]+" ";
-        // }
-        // print(printList);
-        //trackMesh.spline.pointCount;
-        //trackMesh.spline.GetPoint();
+        
     }
-    **/
 
-    private Vector3 splineTargetDirection = Vector3.forward;
-    //Изгибание сплайна по функции
+    /// <summary>
+    /// Updates the track spline target direction
+    /// </summary>
+    /// <param name="deltaTime"> Time since last update </param>
+    private void UpdateTrackSplineTargetDirection(float deltaTime){
+        float speed = trackForwardVelocity/maxForwardSpeed;
+        changeSplineDirectionTimer += deltaTime * speed;
+        if (changeSplineDirectionTimer > changeSplineDirectionCoolDown){
+            changeSplineDirectionTimer = 0f;
+            splineTargetDirection = GetRandomDirectionWithinAngle(transform.forward, maxSplineAngle);
+        }
+        splineCurentDirection = Vector3.Slerp(splineCurentDirection, splineTargetDirection, speed*splineBendSpeed*deltaTime/180f*Mathf.PI);
+    }
+
+    /// <summary>
+    /// Obtaining a random direction within a given angle from the original vector
+    /// </summary>
+    /// <param name="baseDirection"> Original vector </param>
+    /// <param name="angle"> Angle in degrees </param>
+    /// <returns>Vector3 random direction</returns>
+    Vector3 GetRandomDirectionWithinAngle(Vector3 baseDirection, float angle)
+    {
+        float randomAngle = UnityEngine.Random.Range(-angle, angle);
+        return Quaternion.AngleAxis(randomAngle, UnityEngine.Random.onUnitSphere) * baseDirection;
+    }
+
+    /// <summary>
+    /// Bends the tracks spline via function using splineTargetDirection by changing the position of spline points starting from index 3
+    /// </summary>
     void UpdateTrackSpline(){
+        Vector3 startPosition = trackMesh.spline.GetPoint(2).position;
+        float maxDistance = splineDistanceBetweenPoints*(trackMesh.spline.pointCount-3);
         for (int i = 3; i < trackMesh.spline.pointCount; i++){
             SplinePoint trackPoint = trackMesh.spline.GetPoint(3);
-            //trackPoint.position = targetRotation*(-splinePointLocal.position + firstPointLocalPosition);
-            //trackPoint.normal = targetRotation*splinePointLocal.up;
+            float distance = splineDistanceBetweenPoints*(i-2);
+            trackPoint.position = startPosition+Vector3.Lerp(transform.forward,splineCurentDirection,distance/maxDistance).normalized*distance;
+            trackPoint.normal = Vector3.up;
             trackMesh.spline.SetPoint(i, trackPoint);
         }
         
     }
 
-    Vector3 ReflectVectorAxis(Vector3 original, Vector3 axis)
-    {
-        Vector3 normal = axis.normalized;
-        return (-original) - Vector3.Project(-original,axis) + Vector3.Project(original,axis);
-    }
+    // Vector3 ReflectVectorAxis(Vector3 original, Vector3 axis)
+    // {
+    //     Vector3 normal = axis.normalized;
+    //     return (-original) - Vector3.Project(-original,axis) + Vector3.Project(original,axis);
+    // }
 
+
+    /// <summary>
+    /// Sets the track spline
+    /// </summary>
     private void SetTrackSpline(){
         //trackMesh.spline = trackData.trackSpline;
         //trackMesh.loopSamples = true;
@@ -206,30 +180,10 @@ public class Track : MonoBehaviour
         //startTrackOffset = trackMesh.transform.position;
     }
 
+    /// <summary>
+    /// Adds forward velocity to the track
+    /// </summary>
     public void addForwardVelocity(float value){
         trackForwardVelocity += value;
-    }
-
-    public Vector3 GetVelocityOnPoint(Vector3 point){
-        return Vector3.zero;
-    }
-     void OnDrawGizmos()
-    {
-    //     if (trackMeshLength == 0 || trackMesh.spline == null)
-    //         return;
-        
-    //     SplineSample sample = trackMesh.spline.Evaluate(currentDistance/trackMeshLength);
-
-    //     Vector3 point = transform.position + Vector3.up;
-    //     Quaternion targetRotation = Quaternion.LookRotation(sample.forward, sample.up);
-    //    // Quaternion targetRotation = Quaternion.FromToRotation(sample.forward, transform.forward);
-
-
-    //     Gizmos.color = Color.green;
-    //     Gizmos.DrawLine(point, point + targetRotation*sample.up);
-    //     Gizmos.color = Color.blue;
-    //     Gizmos.DrawLine(point, point + targetRotation*sample.right);
-    //     Gizmos.color = Color.red;
-    //     Gizmos.DrawLine(point, point + targetRotation*sample.forward);
     }
 }

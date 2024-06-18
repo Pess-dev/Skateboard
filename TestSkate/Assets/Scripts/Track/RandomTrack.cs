@@ -5,7 +5,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "RandomTrack", menuName = "TrackData", order = 1)]
 public class RandomTrack : TrackData
 {
-     [System.Serializable]
+    [System.Serializable]
     public class ChunkData{
         public Object ChunkPrefab;
         public float weight = 1;//can be higher than 1
@@ -13,6 +13,11 @@ public class RandomTrack : TrackData
 
     [SerializeField]
     protected List<ChunkData> Chunks = new List<ChunkData>();
+
+    /// <summary>
+    /// Get the random chunk of the track
+    /// </summary>
+    /// <returns>Chunk class object</returns>
     public override Chunk GetChunk()
     {
         float totalWeight = 0;

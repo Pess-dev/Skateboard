@@ -12,14 +12,37 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 111ebbee7086d364b85a5b7d071d73ad, type: 3}
   m_Name: RandomTrack
   m_EditorClassIdentifier: 
-  trackSpline: {fileID: 254673996092572415, guid: 4c0272eb85627f8469d3d9f4aca6b69a, type: 3}
-  startTrackDistance: 5
-  Chunks:
-  - ChunkPrefab: {fileID: 7394793216937985908, guid: a7cbef83ddd5b724faec5512e298904e, type: 3}
-    weight: 3
-  - ChunkPrefab: {fileID: 3616990487222273436, guid: 061a4f47f7088d84ab58ebce8cfd029b, type: 3}
+  chunks:
+  - chunkPrefab: {fileID: 3616990487222273436, guid: 061a4f47f7088d84ab58ebce8cfd029b, type: 3}
+    weight: 1
+    count: 1
+  - chunkPrefab: {fileID: 1805045182374071172, guid: aced5f126a7e85042834d4ea0e61d547, type: 3}
+    weight: 1
+    count: 1
+  - chunkPrefab: {fileID: 2431843088755400258, guid: 660d2b1f872adef43a021ec622cb1b31, type: 3}
+    weight: 0.5
+    count: 3
+  - chunkPrefab: {fileID: 7631769124949152086, guid: 8ea3cc7d4e36d5340aab2a27037a37bf, type: 3}
+    weight: 0.5
+    count: 3
+  - chunkPrefab: {fileID: 728787006195887270, guid: 7b26dd808db5859498fb86c1e5563095, type: 3}
+    weight: 0.5
+    count: 3
+  - chunkPrefab: {fileID: 8483346265416191558, guid: 23d05e11b3ab50e48bc482a074c3dc0b, type: 3}
+    weight: 0.5
+    count: 3
+  - chunkPrefab: {fileID: 7394793216937985908, guid: a7cbef83ddd5b724faec5512e298904e, type: 3}
+    weight: 5
+    count: 1
+  - chunkPrefab: {fileID: 4020373305321970765, guid: b086b375341457e45a48ad4878dc7549, type: 3}
     weight: 2
-  - ChunkPrefab: {fileID: 8753415490466826570, guid: 2bc33f1d8cd57784c98d42c371a225d6, type: 3}
+    count: 3
+  - chunkPrefab: {fileID: 1965230065320823682, guid: 9bbdb83603635b746a326a95d6002485, type: 3}
     weight: 2
-  - ChunkPrefab: {fileID: 1805045182374071172, guid: aced5f126a7e85042834d4ea0e61d547, type: 3}
-    weight: 2
+    count: 3
+  - chunkPrefab: {fileID: 3782792439568849165, guid: 7efe634e88fcf154292bee70298e3e5f, type: 3}
+    weight: 0.1
+    count: 1
+  - chunkPrefab: {fileID: 3753004268949936116, guid: 995c8e4c5076eeb4da68a9504dee4025, type: 3}
+    weight: 0.1
+    count: 1

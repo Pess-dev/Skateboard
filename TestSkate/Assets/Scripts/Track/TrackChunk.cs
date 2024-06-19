@@ -5,11 +5,11 @@ using UnityEngine;
 
 public class TrackChunk : MonoBehaviour
 {
-    public float ChunkLength = 1f;
+    public float chunkLength = 1f;
     Track _track;
     SplineFollower splineFollower;
     bool flag = true;
-    void Start()
+    protected void Start()
     {
         _track = Track.Instance;
         splineFollower = GetComponent<SplineFollower>();
@@ -24,7 +24,7 @@ public class TrackChunk : MonoBehaviour
         splineFollower.SetPercent(100d);
     }
 
-    void Update()
+    protected void Update()
     {
         if (flag)
         {splineFollower.SetPercent(100d);

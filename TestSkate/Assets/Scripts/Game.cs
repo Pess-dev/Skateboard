@@ -23,6 +23,8 @@ public class Game : MonoBehaviour
     public float maxStyle = 100f;
     [SerializeField]
     private float styleMultiplier = 1f;
+    [SerializeField]
+    private float styleDecreasingSpeed = 1f;
     
     public float timer {get; private set;} = 0;
 
@@ -53,9 +55,8 @@ public class Game : MonoBehaviour
     ///<param name="deltaTime">Time since last update</param>
     void UpdateGame(float deltaTime){
         timer += deltaTime;
-        style -= deltaTime;
         onStyleChanged.Invoke();
-        if (style < 0) style = 0;
+        knockDownStyle(deltaTime*styleDecreasingSpeed);
     }
 
     ///<summary>

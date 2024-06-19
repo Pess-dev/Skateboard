@@ -68,10 +68,16 @@ public class Skate : MonoBehaviour
         Vector3 planedForward = Vector3.ProjectOnPlane(boardForward, Vector3.up).normalized;
 
         float angleForward = -Vector3.SignedAngle(planedRight, board.right, planedForward);
-        float angleRight = Vector3.SignedAngle(planedForward,board.forward, planedRight)-90;
-       // Debug.DrawLine(board.position, board.position + planedForward, Color.red);
+        
+        //should be decommented
+        //float angleRight = Vector3.SignedAngle(planedForward,board.forward, planedRight)-90;
+
+        float angleRight = Vector3.SignedAngle(planedForward,board.forward, planedRight);
+        
+        
+        // Debug.DrawLine(board.position, board.position + planedForward, Color.red);
         //Debug.DrawLine(board.position, board.position + planedRight, Color.blue);
-       // Debug.DrawLine(board.position, board.position + Vector3.up, Color.blue);
+        // Debug.DrawLine(board.position, board.position + Vector3.up, Color.blue);
 
         float headHeight = head.position.y -board.position.y;
 
@@ -87,6 +93,7 @@ public class Skate : MonoBehaviour
         localMoveDirection = forwardValue*Vector3.forward + Vector3.right*rightValue;
         
         pitch = Mathf.Clamp(angleRight, -maxRigthAngle, maxRigthAngle)/maxRigthAngle;
+        //print("Pitch "+pitch+" "+angleRight);
 
         //        print(localMoveDirection + " " + angleForward + " "+angleRight);
         // float speed = Mathf.Clamp(maxRigthAngle-Mathf.Abs(angleRight), 0, maxRigthAngle) / maxRigthAngle*movementSpeed;

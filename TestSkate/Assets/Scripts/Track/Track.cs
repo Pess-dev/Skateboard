@@ -25,22 +25,11 @@ public class Track : MonoBehaviour
     private SplineMesh trackMesh;
 
     private Skate _skate;
-
-    private float traveledDistance = 0;
-    
-    // [SerializeField]
-    // private float forwardTrackDistance = 20f;
-    // [SerializeField]
-    // private float backwardsTrackDistance = 5f;
-    // private float forwardTrackDistance01 = 0f;
-    // private float backwardsTrackDistance01 = 0f;
-    private float currentDistance = 0f;
     
     // [SerializeField]
     // private int startBendingPoint = 3;
     [SerializeField]
     private float splineDistanceBetweenPoints = 5;
-    private float trackMeshLength = 0f;
     //private Vector3 startTrackOffset = Vector3.zero;
 
     [SerializeField]
@@ -77,12 +66,14 @@ public class Track : MonoBehaviour
     void Start()
     {
         _skate = Skate.Instance;
-        SetTrackSpline();
+        SetTrack();
+        Game.Instance.onGameStarted.AddListener(SetTrack);
+        Game.Instance.onGameEnded.AddListener(EndTrack);
     }
 
     void Update(){
         UpdateTrackMovement(Time.deltaTime);
-        UpdateTrackSplineTargetDirection(Time.deltaTime);
+        UpdateTrackSplineTargetDirection(Time.deltaTime, !Game.Instance.isPlaying);
         UpdateTrackSpline();
     }
 
@@ -91,7 +82,7 @@ public class Track : MonoBehaviour
     /// </summary>
     /// <param name="deltaTime"> Time since last update </param>
     private void UpdateTrackMovement(float deltaTime){
-        float addVelocity = (_skate.localMoveDirection.z*forwardAcceleration-friction)*Time.deltaTime;
+        float addVelocity = (_skate.localMoveDirection.z*(Game.Instance.isPlaying?forwardAcceleration:0)-friction)*Time.deltaTime;
 
         if(_skate.localMoveDirection.z==0) 
             addVelocity -= Mathf.Abs(_skate.pitch)*forwardAcceleration*Time.deltaTime;
@@ -108,22 +99,19 @@ public class Track : MonoBehaviour
 
         Vector3 Xvelocity = rigthVelocity*transform.right;
         transform.position += Xvelocity*Time.deltaTime;
-
-        float deltaPositionDistance = trackForwardVelocity*Time.deltaTime;
-
-        traveledDistance += deltaPositionDistance;
-        currentDistance += deltaPositionDistance;
-        if (currentDistance > trackMeshLength){
-            currentDistance = currentDistance - trackMeshLength;
-        }
-        
     }
 
     /// <summary>
     /// Updates the track spline target direction
     /// </summary>
     /// <param name="deltaTime"> Time since last update </param>
-    private void UpdateTrackSplineTargetDirection(float deltaTime){
+    /// <param name="forward">If true, the bend will be in the forward direction without reference to speed</param>
+    private void UpdateTrackSplineTargetDirection(float deltaTime, bool forward = false){
+        if (forward) {
+            splineCurentDirection = Vector3.forward;
+            return;
+            }
+
         float speed = trackForwardVelocity/maxForwardSpeed;
         changeSplineDirectionTimer += deltaTime * speed;
         if (changeSplineDirectionTimer > changeSplineDirectionCoolDown){
@@ -164,16 +152,19 @@ public class Track : MonoBehaviour
 
 
     /// <summary>
-    /// Sets the track spline
+    /// Sets the starting game values
     /// </summary>
-    private void SetTrackSpline(){
-        //trackMesh.spline = trackData.trackSpline;
-        //trackMesh.loopSamples = true;
-        trackMeshLength = trackMesh.spline.CalculateLength();
-        //forwardTrackDistance01 = forwardTrackDistance/trackMeshLength;
-        //backwardsTrackDistance01 = backwardsTrackDistance/trackMeshLength;
-        //currentDistance = trackData.startTrackDistance;
-        //startTrackOffset = trackMesh.transform.position;
+    private void SetTrack(){
+        trackForwardVelocity = 0f;
+        splineTargetDirection = Vector3.forward;
+        changeSplineDirectionTimer = 1000f;
+    }
+    
+    /// <summary>
+    /// Sets the starting game values
+    /// </summary>
+    private void EndTrack(){
+        splineTargetDirection = Vector3.forward;
     }
 
     /// <summary>

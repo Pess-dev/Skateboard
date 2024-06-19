@@ -1,0 +1,51 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 111ebbee7086d364b85a5b7d071d73ad, type: 3}
+  m_Name: RandomTrack2Min
+  m_EditorClassIdentifier: 
+  trackTime: 120
+  trackLength: Infinity
+  hp: Infinity
+  chunks:
+  - chunkPrefab: {fileID: 3616990487222273436, guid: 061a4f47f7088d84ab58ebce8cfd029b, type: 3}
+    weight: 1
+    count: 1
+  - chunkPrefab: {fileID: 1805045182374071172, guid: aced5f126a7e85042834d4ea0e61d547, type: 3}
+    weight: 1
+    count: 1
+  - chunkPrefab: {fileID: 2431843088755400258, guid: 660d2b1f872adef43a021ec622cb1b31, type: 3}
+    weight: 0.5
+    count: 3
+  - chunkPrefab: {fileID: 7631769124949152086, guid: 8ea3cc7d4e36d5340aab2a27037a37bf, type: 3}
+    weight: 0.5
+    count: 3
+  - chunkPrefab: {fileID: 728787006195887270, guid: 7b26dd808db5859498fb86c1e5563095, type: 3}
+    weight: 0.5
+    count: 3
+  - chunkPrefab: {fileID: 8483346265416191558, guid: 23d05e11b3ab50e48bc482a074c3dc0b, type: 3}
+    weight: 0.5
+    count: 3
+  - chunkPrefab: {fileID: 7394793216937985908, guid: a7cbef83ddd5b724faec5512e298904e, type: 3}
+    weight: 5
+    count: 1
+  - chunkPrefab: {fileID: 4020373305321970765, guid: b086b375341457e45a48ad4878dc7549, type: 3}
+    weight: 2
+    count: 3
+  - chunkPrefab: {fileID: 1965230065320823682, guid: 9bbdb83603635b746a326a95d6002485, type: 3}
+    weight: 2
+    count: 3
+  - chunkPrefab: {fileID: 3782792439568849165, guid: 7efe634e88fcf154292bee70298e3e5f, type: 3}
+    weight: 0.1
+    count: 1
+  - chunkPrefab: {fileID: 3753004268949936116, guid: 995c8e4c5076eeb4da68a9504dee4025, type: 3}
+    weight: 0.1
+    count: 1

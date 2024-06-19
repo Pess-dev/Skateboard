@@ -12,8 +12,9 @@ public class RoadBlock : Obstacle
     /// </summary>
     public override void Collided()
     {
+        PlaySound();
         Game.Instance.knockDownStyle(styleCost);
         Track.Instance.addForwardVelocity(-frictionSpeed);
-        Destroy(gameObject);
+        Kill();
     }
 }

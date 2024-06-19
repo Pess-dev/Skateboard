@@ -10,8 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 111ebbee7086d364b85a5b7d071d73ad, type: 3}
-  m_Name: RandomTrack
+  m_Name: RandomTrackZen
   m_EditorClassIdentifier: 
+  trackTime: Infinity
+  trackLength: Infinity
+  hp: Infinity
   chunks:
   - chunkPrefab: {fileID: 3616990487222273436, guid: 061a4f47f7088d84ab58ebce8cfd029b, type: 3}
     weight: 1

@@ -33,6 +33,7 @@ public class ChunkSpawner : MonoBehaviour
     }
 
     void Update(){
+        if (!Game.Instance.isPlaying) return;
         SplineComputer computer = _track.GetSplineComputer();
         transform.position = computer.GetPoint(computer.pointCount-1).position;
         traveled += _track.trackForwardVelocity*Time.deltaTime;

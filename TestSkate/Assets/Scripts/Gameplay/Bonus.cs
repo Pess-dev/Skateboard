@@ -11,7 +11,8 @@ public class Bonus : Obstacle
     /// </summary>
     public override void Collided()
     {
+        PlaySound();
         Game.Instance.AddScore(cost);
-        Destroy(gameObject);
+        Kill();
     }
 }

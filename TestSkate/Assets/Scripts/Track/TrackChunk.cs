@@ -20,6 +20,7 @@ public class TrackChunk : MonoBehaviour
         
         splineFollower.spline = _track.GetSplineComputer();
         splineFollower.onBeginningReached += OnEnd;
+        Game.Instance.onGameEnded.AddListener(DestroyChunk);
         splineFollower.updateMethod = SplineFollower.UpdateMethod.LateUpdate;
         splineFollower.SetPercent(100d);
     }
@@ -34,6 +35,9 @@ public class TrackChunk : MonoBehaviour
 
     void OnEnd(double percent)
     {
+        DestroyChunk();
+    }
+    void DestroyChunk(){
         Destroy(gameObject);
     }
 }

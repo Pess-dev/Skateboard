@@ -8,6 +8,11 @@ using UnityEngine.EventSystems;
 //[CreateAssetMenu(fileName = "TrackData", menuName = "Track", order = 1)]
 public class TrackData : ScriptableObject
 {
+    public float trackTime = 120f;
+
+    public float trackLength = 1000f;
+
+    public float hp = 3;
     /// <summary>
     /// Get the chunk of the track
     /// </summary>

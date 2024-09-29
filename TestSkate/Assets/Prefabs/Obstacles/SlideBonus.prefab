@@ -210,7 +210,7 @@ MonoBehaviour:
   costPerLength: 5
   length: 5
   bonusTransform: {fileID: 4056859222531951424}
-  neededPitch: 0.5
+  neededPitch: 0.9
   soundDistanceCooldown: 2
 --- !u!82 &6274919720548878615
 AudioSource:

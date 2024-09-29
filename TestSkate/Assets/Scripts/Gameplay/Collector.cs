@@ -3,15 +3,14 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-
 public class Collector : MonoBehaviour
 {
     Skate _skate;
+    [SerializeField]
     private Transform target;
 
     void Start(){
         _skate = Skate.Instance;
-        target = _skate.GetHead();
     }
     
     public void Update(){

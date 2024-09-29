@@ -89,7 +89,8 @@ public class Track : MonoBehaviour
 
         trackForwardVelocity = Mathf.Clamp(trackForwardVelocity+addVelocity, 0, maxForwardSpeed);
        
-        float rigthVelocity = - (_skate.localMoveDirection.x*maxRightSpeed*(forwardSpeedAffectToRightSpeed?Mathf.Sqrt(_skate.localMoveDirection.z):1));
+        float rigthVelocity = - (_skate.localMoveDirection.x*maxRightSpeed*(forwardSpeedAffectToRightSpeed?Mathf.Sqrt(_skate.localMoveDirection.z):1))*
+        (1-_skate.pitch);
         
         Vector3 deltaPos = transform.InverseTransformDirection(_skate.transform.position - transform.position);
 

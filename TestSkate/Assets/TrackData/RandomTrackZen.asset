@@ -39,10 +39,10 @@ MonoBehaviour:
     count: 1
   - chunkPrefab: {fileID: 4020373305321970765, guid: b086b375341457e45a48ad4878dc7549, type: 3}
     weight: 2
-    count: 3
+    count: 2
   - chunkPrefab: {fileID: 1965230065320823682, guid: 9bbdb83603635b746a326a95d6002485, type: 3}
     weight: 2
-    count: 3
+    count: 2
   - chunkPrefab: {fileID: 3782792439568849165, guid: 7efe634e88fcf154292bee70298e3e5f, type: 3}
     weight: 0.1
     count: 1

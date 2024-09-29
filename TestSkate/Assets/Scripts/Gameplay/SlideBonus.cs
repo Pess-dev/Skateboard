@@ -27,19 +27,22 @@ public class SlideBonus : Obstacle
             //print("Sliding "+traveledCollided+" Pitch "+Skate.Instance.pitch+" traveledCollided "+traveledCollided);
             traveledCollided += Time.deltaTime*Track.Instance.trackForwardVelocity;
             soundTraveledCollided += Time.deltaTime*Track.Instance.trackForwardVelocity;
-            if (soundTraveledCollided > soundDistanceCooldown) {
-                PlaySound();
-                soundTraveledCollided = 0f;
-            }
+            
             if (Mathf.Abs(Skate.Instance.pitch)>neededPitch) {
                 Game.Instance.AddScore(costPerLength*Time.deltaTime);
             }
             else
             {
                 Kill();
+                collided=false;
             }
             if (traveledCollided>length) {
                 Kill();
+                collided=false;
+            }
+            if (soundTraveledCollided > soundDistanceCooldown) {
+                PlaySound();
+                soundTraveledCollided = 0f;
             }
         }
     }

@@ -4,12 +4,10 @@ using UnityEngine;
 
 public class CalibrateGyro : MonoBehaviour
 {
-    Skate skate;
-
-    Transform visual;
-
-    void Start()
+    [SerializeField]
+    Quaternion startRotation;
+    public void Calibrate()
     {
-        
+        transform.rotation = startRotation;
     }
 }

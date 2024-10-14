@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class Teleporter : MonoBehaviour
 {
+    [SerializeField]
     Transform teleportTo;
     public void Teleport(){
         transform.position = teleportTo.position;

@@ -6,6 +6,7 @@ using System.Net.Sockets;
 using System;
 using System.IO;
 using TMPro;
+using System.Globalization;
 
 public class TCPListner : MonoBehaviour
 {
@@ -15,10 +16,13 @@ public class TCPListner : MonoBehaviour
     public string ip = "192.168.31.18";
     public int port = 5045;
     public int myId = 0;
-    public TCP tcp;
+    public static TCP tcp;
 
     // public TMP_Text X;
     // public TMP_Text Y;
+
+    public static Vector3 eulers {get; set;}
+
 
     private void Awake()
     {
@@ -42,33 +46,33 @@ public class TCPListner : MonoBehaviour
     {
         // X.text = MessageToString.GetX().ToString();
         // Y.text = MessageToString.GetY().ToString();
-
-        //transform.rotation = Quaternion.Euler(MessageToString.GetX(), 0, MessageToString.GetY());
+        //xValue = MessageToString.GetX();
+        //yValue = MessageToString.GetY();
+        eulers = MessageToString.GetEulers();
     }
 
-    public void ConnectToServer()
+    public static void ConnectToServer()
     {
-        tcp.Connect();
+        tcp.Connect(instance.ip, instance.port);
     }
+
+    public static void ConnectToServer(string ip, int port)
+    {
+        tcp.Connect(ip, port);
+    }
+
     public static class MessageToString
     {
         public static string Coordinates;
-
-        public static float GetX()
-        {
+        public static Vector3 GetEulers(){
+            //print(Coordinates); 
             if (string.IsNullOrEmpty(Coordinates))
-                return -100f;
-            string substrX = Coordinates.Substring(4,6);
-            Debug.Log(substrX);
-            return float.Parse(substrX);
-        }
-        public static float GetY()
-        {
-            if (string.IsNullOrEmpty(Coordinates))
-                return -100f;
-            string substrY = Coordinates.Substring(12, 6);
-            Debug.Log(substrY);
-            return float.Parse(substrY);
+                return Vector3.zero;
+            //string substrX = Coordinates.Substring(4,6);
+            string[] subs = Coordinates.Split(',');
+            Vector3 eulers = new Vector3(float.Parse(subs[0], CultureInfo.InvariantCulture), float.Parse(subs[2],CultureInfo.InvariantCulture), float.Parse(subs[2],CultureInfo.InvariantCulture));
+            print(eulers);
+            return eulers;
         }
     }
 
@@ -79,8 +83,9 @@ public class TCPListner : MonoBehaviour
         private NetworkStream stream;
         private byte[] receiveBuffer;
 
-        public void Connect()
+        public void Connect(string ip, int port)
         {
+            print("Attempting to connect to " + ip + ":" + port);
             socket = new TcpClient
             {
                 ReceiveBufferSize = dataBufferSize,
@@ -88,7 +93,7 @@ public class TCPListner : MonoBehaviour
             };
 
             receiveBuffer = new byte[dataBufferSize];
-            socket.BeginConnect(instance.ip, instance.port, ConnectCallback, socket);
+            socket.BeginConnect(ip, port, ConnectCallback, socket);
         }
         private void ConnectCallback(IAsyncResult _result)
         {
@@ -106,19 +111,18 @@ public class TCPListner : MonoBehaviour
         {
             try
              {
-                 int _byteLength = stream.EndRead(_result);
-                 if (_byteLength <= 0)
-                 {
-                     return;
-                 }
-                 byte[] _data = new byte[_byteLength];
-                 Array.Copy(receiveBuffer, _data, _byteLength);
+                int _byteLength = stream.EndRead(_result);
+                if (_byteLength <= 0)
+                {
+                    return;
+                }
+                byte[] _data = new byte[_byteLength];
+                Array.Copy(receiveBuffer, _data, _byteLength);
 
-                 stream.BeginRead(receiveBuffer, 0, dataBufferSize, ReceiveCallback, null);
+                stream.BeginRead(receiveBuffer, 0, dataBufferSize, ReceiveCallback, null);
 
                 string results = System.Text.Encoding.UTF8.GetString(receiveBuffer);
                 MessageToString.Coordinates = results;
-
              }
              catch
              {

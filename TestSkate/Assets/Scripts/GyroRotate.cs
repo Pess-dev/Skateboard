@@ -5,9 +5,7 @@ using UnityEngine;
 public class GyroRotate : MonoBehaviour
 {   
     void Update(){
-       // transform.rotation = Quaternion.Euler(TCPListner.MessageToString.GetX(), TCPListner.MessageToString.GetY(),0);
-       //print(TCPListner.MessageToString.GetX()+" "+ TCPListner.MessageToString.GetY());
-       TCPListner.MessageToString.GetX();
-       TCPListner.MessageToString.GetY();
+        transform.rotation = Quaternion.Euler(TCPListner.eulers);
+        //print(TCPListner.eulers);
     }
 }

@@ -70,7 +70,7 @@ public class TCPListner : MonoBehaviour
                 return Vector3.zero;
             //string substrX = Coordinates.Substring(4,6);
             string[] subs = Coordinates.Split(',');
-            Vector3 eulers = new Vector3(float.Parse(subs[0], CultureInfo.InvariantCulture), float.Parse(subs[2],CultureInfo.InvariantCulture), float.Parse(subs[2],CultureInfo.InvariantCulture));
+            Vector3 eulers = new Vector3(float.Parse(subs[0], CultureInfo.InvariantCulture), float.Parse(subs[1],CultureInfo.InvariantCulture), float.Parse(subs[2],CultureInfo.InvariantCulture));
             print(eulers);
             return eulers;
         }

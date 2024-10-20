@@ -20,6 +20,7 @@ public class Skate : MonoBehaviour
         {
             Instance = this;
         }
+        head = Camera.main.transform;
     }
     ///
 
@@ -42,7 +43,7 @@ public class Skate : MonoBehaviour
     [SerializeField]
     private Transform board;
 
-    [SerializeField]
+    //[SerializeField]
     private Transform head;
 
     [SerializeField]

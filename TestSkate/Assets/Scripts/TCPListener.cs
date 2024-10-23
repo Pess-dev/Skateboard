@@ -58,6 +58,7 @@ public class TCPListner : MonoBehaviour
 
     public static void ConnectToServer(string ip, int port)
     {
+        tcp = new TCP();
         tcp.Connect(ip, port);
     }
 
@@ -65,12 +66,14 @@ public class TCPListner : MonoBehaviour
     {
         public static string Coordinates;
         public static Vector3 GetEulers(){
-            //print(Coordinates); 
+            print(Coordinates); 
             if (string.IsNullOrEmpty(Coordinates))
                 return Vector3.zero;
             //string substrX = Coordinates.Substring(4,6);
             string[] subs = Coordinates.Split(',');
-            Vector3 eulers = new Vector3(float.Parse(subs[0], CultureInfo.InvariantCulture), float.Parse(subs[1],CultureInfo.InvariantCulture), float.Parse(subs[2],CultureInfo.InvariantCulture));
+            Vector3 eulers = new Vector3(float.Parse(subs[0], CultureInfo.InvariantCulture), 
+                                        float.Parse(subs[1],CultureInfo.InvariantCulture), 
+                                        float.Parse(subs[2],CultureInfo.InvariantCulture));
             print(eulers);
             return eulers;
         }
@@ -120,9 +123,10 @@ public class TCPListner : MonoBehaviour
                 Array.Copy(receiveBuffer, _data, _byteLength);
 
                 stream.BeginRead(receiveBuffer, 0, dataBufferSize, ReceiveCallback, null);
-
-                string results = System.Text.Encoding.UTF8.GetString(receiveBuffer);
+                
+                string results = System.Text.Encoding.UTF8.GetString(_data);
                 MessageToString.Coordinates = results;
+                _data = new byte[dataBufferSize];
              }
              catch
              {

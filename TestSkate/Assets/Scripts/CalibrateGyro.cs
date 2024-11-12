@@ -6,8 +6,11 @@ public class CalibrateGyro : MonoBehaviour
 {
     [SerializeField]
     Quaternion startRotation;
+
+    Quaternion preCalibrate = Quaternion.identity;
     public void Calibrate()
     {
-        transform.rotation = startRotation;
+        preCalibrate = transform.rotation;
+        //transform.rotation = startRotation;
     }
 }

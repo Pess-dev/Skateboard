@@ -66,10 +66,9 @@ public class TCPListner : MonoBehaviour
     {
         public static string Coordinates;
         public static Vector3 GetEulers(){
-            print(Coordinates); 
+            //print(Coordinates); 
             if (string.IsNullOrEmpty(Coordinates))
                 return Vector3.zero;
-            //string substrX = Coordinates.Substring(4,6);
             string[] subs = Coordinates.Split(',');
             Vector3 eulers = new Vector3(float.Parse(subs[0], CultureInfo.InvariantCulture), 
                                         float.Parse(subs[1],CultureInfo.InvariantCulture), 

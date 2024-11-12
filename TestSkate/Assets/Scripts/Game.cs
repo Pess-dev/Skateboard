@@ -20,7 +20,7 @@ public class Game : MonoBehaviour
     }
     ///
 
-    public float maxStyle = 100f;
+    public float maxStyle = 30f;
     [SerializeField]
     private float styleMultiplier = 1f;
     [SerializeField]

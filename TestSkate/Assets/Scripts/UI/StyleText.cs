@@ -29,14 +29,14 @@ public class StyleText : MonoBehaviour
     }
 //D	C	B	A	S	SS	SSS
     List<Style> styles = new List<Style>(){
-        new Style("", 0f, Color.white, 36),
-        new Style("Dull", 0.3f, Color.white, 36),
-        new Style("Cool!", 0.4f, Color.blue, 50),
-        new Style("Bravo!", 0.5f, Color.yellow, 60),
-        new Style("Awesome!", 0.6f, new Color(1, 0.4f, 0), 70),
-        new Style("Sweet!", 0.80f, Color.red, 80),
-        new Style("SShowtime!!", 0.90f, Color.red, 90),
-        new Style("SSStylish!!!", 0.95f, Color.red, 100)
+        new Style("", 0f, Color.white, 5),
+        new Style("Dull", 0.3f, Color.white, 8),
+        new Style("Cool!", 0.4f, Color.blue, 10),
+        new Style("Bravo!", 0.5f, Color.yellow, 15),
+        new Style("Awesome!", 0.6f, new Color(1, 0.4f, 0), 18),
+        new Style("Sweet!", 0.80f, Color.red, 20),
+        new Style("SShowtime!!", 0.90f, Color.red, 25),
+        new Style("SSStylish!!!", 0.95f, Color.red, 30)
     };
 
      private Rigidbody _rb;
